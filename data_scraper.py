@@ -66,9 +66,12 @@ for movie_id in movie_ids:
     with open(movie_id[0] + '.csv', mode='w') as data_file:
         data = csv.writer(data_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-        data.writerow(['title', 'date', 'rating', 'review'])
+        data.writerow(['title', 'date', 'date_section', 'rating', 'review'])
 
         for item in soup.select(".review-container"):
+
+            # 0 is 2017, 1 is 2018, etc. 
+            date_section = 0
 
             review_date = item.select(".review-date")[0].text
             date_time_obj = datetime.strptime(review_date, '%d %B %Y')
@@ -76,9 +79,10 @@ for movie_id in movie_ids:
                 break
 
             in_section = False
-            for dates in date_sections:
-                if date_time_obj > dates[0] and date_time_obj < dates[1]:
+            for i in range(len(date_sections)):
+                if date_time_obj > date_sections[i][0] and date_time_obj < date_sections[i]dates[1]:
                     in_section = True
+                    date_section = i
                     break
             if not in_section:
                 continue
@@ -95,6 +99,6 @@ for movie_id in movie_ids:
                 continue
             review_rating = review_rating[0].text
 
-            data.writerow([str(review_title), str(date_time_obj), str(review_rating), str(review_text)])
+            data.writerow([str(review_title), str(date_time_obj), str(date_section), str(review_rating), str(review_text)])
 
     driver.quit()

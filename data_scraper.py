@@ -32,6 +32,8 @@ driver = webdriver.Chrome(options=custom_options)
 
 for movie_id in movie_ids:
 
+    startTimer = time.time()
+
     url = 'https://www.imdb.com/title/' + movie_id[0] + '/reviews?sort=submissionDate&dir=desc&ratingFilter=0'
 
     print(url)
@@ -80,7 +82,7 @@ for movie_id in movie_ids:
 
             in_section = False
             for i in range(len(date_sections)):
-                if date_time_obj > date_sections[i][0] and date_time_obj < date_sections[i]dates[1]:
+                if date_time_obj > date_sections[i][0] and date_time_obj < date_sections[i][1]:
                     in_section = True
                     date_section = i
                     break
@@ -101,4 +103,6 @@ for movie_id in movie_ids:
 
             data.writerow([str(review_title), str(date_time_obj), str(date_section), str(review_rating), str(review_text)])
 
-    driver.quit()
+    print("File written. Seconds elapsed: ",time.time()-startTimer)
+
+driver.quit()
